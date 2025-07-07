@@ -29,7 +29,6 @@ const contactSchema = Yup.object({
     .min(5, "Address must be at least 5 characters")
     .required("Address is required"),
   postcode: Yup.string()
-    .matches(/^\d{4,10}$/, "Postcode must be 4–10 digits")
     .required("Postcode is required"),
   contactName: Yup.string()
     .test(
@@ -39,7 +38,6 @@ const contactSchema = Yup.object({
     )
     .required("Contact name is required"),
   contactPhone: Yup.string()
-    .matches(/^\d{10,}$/, "Contact phone must be at least 10 digits")
     .required("Contact phone is required"),
   email: Yup.string()
     .email("Invalid email address")
