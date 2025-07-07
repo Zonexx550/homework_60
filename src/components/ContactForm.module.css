@@ -1,0 +1,172 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.wrapper {
+  display: flex;
+  gap: 40px;
+  max-width: 900px;
+  margin: 80px auto;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 14px;
+}
+
+.form {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.formTitle {
+  font-size: 44px;
+  font-weight: 700;
+  line-height: 160%;
+  letter-spacing: 0.2px;
+}
+
+.formSubtitle {
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 160%;
+  letter-spacing: 0.3px;
+  color: #737b7d;
+}
+
+.input,
+.textarea {
+  border: none;
+  border-bottom: 1px solid #737b7d;
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 160%;
+  letter-spacing: 0.5px;
+  gap: 12;
+  padding: 12px 0px 12px 0px;
+}
+
+.textarea {
+  resize: vertical;
+}
+
+.inputError {
+  color: red;
+  font-size: 12px;
+}
+
+.inputGroup {
+  display: flex;
+  gap: 20px;
+}
+
+.inputHalf {
+  flex: 1;
+}
+
+.upload {
+  border: 1px dashed #999;
+  padding: 20px;
+  text-align: center;
+  cursor: pointer;
+  color: #666;
+  font-size: 14px;
+  margin-bottom: 4px;
+}
+
+.note {
+  color: #999;
+  font-size: 11px;
+  margin-bottom: 10px;
+}
+
+.checkboxLabel {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  color: #333;
+}
+
+.submitBtn {
+  background-color: #008f17;
+  color: white;
+  border: none;
+  padding: 12px 0;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 160%;
+  letter-spacing: 0.5px;
+}
+
+.submitBtn:disabled {
+  background-color: #999;
+  cursor: not-allowed;
+}
+
+.sidebar {
+  padding: 180px 0;
+  flex-basis: 280px;
+}
+
+.sidebar h4 {
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 160%;
+  letter-spacing: 0.5px;
+  margin-bottom: 32px;
+  color: #383c3e;
+}
+
+.sidebar p {
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 160%;
+  letter-spacing: 0.5px;
+  margin-bottom: 24px;
+  color: #383c3e;
+}
+
+.sidebar h5 {
+  padding: 60px 0 0 0;
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 160%;
+  letter-spacing: 0.5px;
+  color: #383c3e;
+  margin-bottom: 32px;
+}
+
+.newsletterForm {
+  display: flex;
+  gap: 8px;
+}
+
+.newsletterInput {
+  flex: 1;
+  border: none;
+  border-bottom: 1px solid #999;
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 160%;
+  letter-spacing: 0.5px;
+}
+
+.newsletterBtn {
+  background-color: #008f17;
+  color: white;
+  border: none;
+  padding: 16px 32px;
+  cursor: pointer;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.newsletterBtn:disabled {
+  background-color: #999;
+  cursor: not-allowed;
+}
