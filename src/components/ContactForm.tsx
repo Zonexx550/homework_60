@@ -25,7 +25,6 @@ const contactSchema = Yup.object({
   natureOfBusiness: Yup.string(),
   address: Yup.string().min(5).required(),
   postcode: Yup.string()
-    .matches(/^\d{4,10}$/)
     .required(),
   contactName: Yup.string()
     .test(
@@ -35,7 +34,6 @@ const contactSchema = Yup.object({
     )
     .required(),
   contactPhone: Yup.string()
-    .matches(/^\d{10,}$/)
     .required(),
   email: Yup.string().email().required(),
   linkedin: Yup.string(),
