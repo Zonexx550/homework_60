@@ -21,29 +21,38 @@ interface NewsletterFormValues {
 }
 
 const contactSchema = Yup.object({
-  companyName: Yup.string().min(2).required(),
+  companyName: Yup.string()
+    .min(2, "Company name must be at least 2 characters")
+    .required("Company name is required"),
   natureOfBusiness: Yup.string(),
-  address: Yup.string().min(5).required(),
-  postcode: Yup.string()
-    .required(),
+  address: Yup.string()
+    .min(5, "Address must be at least 5 characters")
+    .required("Address is required"),
+  postcode: Yup.string().required("Postcode is required"),
   contactName: Yup.string()
     .test(
       "full-name",
-      "Please enter first and last name",
+      "Please enter at least first and last name",
       (value) => !!value && value.trim().split(" ").length >= 2
     )
-    .required(),
-  contactPhone: Yup.string()
-    .required(),
-  email: Yup.string().email().required(),
+    .required("Contact name is required"),
+  contactPhone: Yup.string().required("Contact phone is required"),
+  email: Yup.string()
+    .email("Invalid email address")
+    .required("Email is required"),
   linkedin: Yup.string(),
-  idea: Yup.string().min(30).required(),
+  idea: Yup.string()
+    .min(30, "Idea description must be at least 30 characters")
+    .required("Idea is required"),
   file: Yup.mixed<File>()
     .nullable()
     .test("fileSize", "File size is too large (max 10MB)", (value) => {
       if (!value) return true;
       return value instanceof File && value.size <= 10 * 1024 * 1024;
     }),
+  nda: Yup.boolean()
+    .oneOf([true], "You must agree to NDA")
+    .required("You must agree to NDA"),
 });
 
 const newsletterSchema = Yup.object({
