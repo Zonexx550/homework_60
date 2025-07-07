@@ -1,4 +1,4 @@
-import { useFormik } from "formik";
+import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import styles from "./ContactForm.module.css";
 
@@ -28,7 +28,9 @@ const contactSchema = Yup.object({
   address: Yup.string()
     .min(5, "Address must be at least 5 characters")
     .required("Address is required"),
-  postcode: Yup.string().required("Postcode is required"),
+  postcode: Yup.string()
+    .matches(/^\d{4,10}$/, "Postcode must be 4–10 digits")
+    .required("Postcode is required"),
   contactName: Yup.string()
     .test(
       "full-name",
@@ -36,7 +38,9 @@ const contactSchema = Yup.object({
       (value) => !!value && value.trim().split(" ").length >= 2
     )
     .required("Contact name is required"),
-  contactPhone: Yup.string().required("Contact phone is required"),
+  contactPhone: Yup.string()
+    .matches(/^\d{10,}$/, "Contact phone must be at least 10 digits")
+    .required("Contact phone is required"),
   email: Yup.string()
     .email("Invalid email address")
     .required("Email is required"),
@@ -56,192 +60,171 @@ const contactSchema = Yup.object({
 });
 
 const newsletterSchema = Yup.object({
-  email: Yup.string().email().required(),
+  email: Yup.string().email("Invalid email").required("Email is required"),
 });
 
 export const ContactForm = () => {
-  const formik = useFormik<ContactFormValues>({
-    initialValues: {
-      companyName: "",
-      natureOfBusiness: "",
-      address: "",
-      postcode: "",
-      contactName: "",
-      contactPhone: "",
-      email: "",
-      linkedin: "",
-      idea: "",
-      file: null,
-      nda: false,
-    },
-    validationSchema: contactSchema,
-    onSubmit: (values) => {
-      alert("Contact form submitted:\n" + JSON.stringify(values, null, 2));
-    },
-  });
-
-  const newsletterFormik = useFormik<NewsletterFormValues>({
-    initialValues: { email: "" },
-    validationSchema: newsletterSchema,
-    onSubmit: (values) => {
-      alert("Newsletter subscribed: " + values.email);
-    },
-  });
-
   return (
     <div className={styles.wrapper}>
-      <form onSubmit={formik.handleSubmit} className={styles.form}>
-        <h2 className={styles.formTitle}>Contact us</h2>
-        <p className={styles.formSubtitle}>
-          Need an experienced and skilled hand with custom IT projects? Fill out
-          the form to get a free consultation.
-        </p>
+      <Formik<ContactFormValues>
+        initialValues={{
+          companyName: "",
+          natureOfBusiness: "",
+          address: "",
+          postcode: "",
+          contactName: "",
+          contactPhone: "",
+          email: "",
+          linkedin: "",
+          idea: "",
+          file: null,
+          nda: false,
+        }}
+        validationSchema={contactSchema}
+        onSubmit={(values) => {
+          alert("Contact form submitted:\n" + JSON.stringify(values, null, 2));
+        }}
+      >
+        {({ isValid, setFieldValue }) => (
+          <Form className={styles.form}>
+            <h2 className={styles.formTitle}>Contact us</h2>
+            <p className={styles.formSubtitle}>
+              Need an experienced and skilled hand with custom IT projects? Fill
+              out the form to get a free consultation.
+            </p>
 
-        <input
-          name="companyName"
-          placeholder="Your Company Name"
-          value={formik.values.companyName}
-          onChange={formik.handleChange}
-          onBlur={formik.handleBlur}
-          className={styles.input}
-        />
-        {formik.touched.companyName && formik.errors.companyName && (
-          <div className={styles.inputError}>{formik.errors.companyName}</div>
-        )}
-
-        <input
-          name="natureOfBusiness"
-          placeholder="Nature of Business"
-          value={formik.values.natureOfBusiness}
-          onChange={formik.handleChange}
-          onBlur={formik.handleBlur}
-          className={styles.input}
-        />
-
-        <div className={styles.inputGroup}>
-          <div className={styles.inputHalf}>
-            <input
-              name="address"
-              placeholder="Address"
-              value={formik.values.address}
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
+            <Field
+              name="companyName"
+              placeholder="Your Company Name"
               className={styles.input}
             />
-            {formik.touched.address && formik.errors.address && (
-              <div className={styles.inputError}>{formik.errors.address}</div>
-            )}
-          </div>
-          <div className={styles.inputHalf}>
-            <input
-              name="postcode"
-              placeholder="Postcode"
-              value={formik.values.postcode}
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
+            <ErrorMessage
+              name="companyName"
+              component="div"
+              className={styles.inputError}
+            />
+
+            <Field
+              name="natureOfBusiness"
+              placeholder="Nature of Business"
               className={styles.input}
             />
-            {formik.touched.postcode && formik.errors.postcode && (
-              <div className={styles.inputError}>{formik.errors.postcode}</div>
-            )}
-          </div>
-        </div>
 
-        <input
-          name="contactName"
-          placeholder="Contact Name"
-          value={formik.values.contactName}
-          onChange={formik.handleChange}
-          onBlur={formik.handleBlur}
-          className={styles.input}
-        />
-        {formik.touched.contactName && formik.errors.contactName && (
-          <div className={styles.inputError}>{formik.errors.contactName}</div>
+            <div className={styles.inputGroup}>
+              <div className={styles.inputHalf}>
+                <Field
+                  name="address"
+                  placeholder="Address"
+                  className={styles.input}
+                />
+                <ErrorMessage
+                  name="address"
+                  component="div"
+                  className={styles.inputError}
+                />
+              </div>
+              <div className={styles.inputHalf}>
+                <Field
+                  name="postcode"
+                  placeholder="Postcode"
+                  className={styles.input}
+                />
+                <ErrorMessage
+                  name="postcode"
+                  component="div"
+                  className={styles.inputError}
+                />
+              </div>
+            </div>
+
+            <Field
+              name="contactName"
+              placeholder="Contact Name"
+              className={styles.input}
+            />
+            <ErrorMessage
+              name="contactName"
+              component="div"
+              className={styles.inputError}
+            />
+
+            <Field
+              name="contactPhone"
+              placeholder="Contact Phone"
+              className={styles.input}
+            />
+            <ErrorMessage
+              name="contactPhone"
+              component="div"
+              className={styles.inputError}
+            />
+
+            <Field
+              name="email"
+              type="email"
+              placeholder="Enter your email"
+              className={styles.input}
+            />
+            <ErrorMessage
+              name="email"
+              component="div"
+              className={styles.inputError}
+            />
+
+            <Field
+              name="linkedin"
+              placeholder="Linkedin"
+              className={styles.input}
+            />
+
+            <Field
+              as="textarea"
+              name="idea"
+              placeholder="Let’s talk about your idea"
+              rows={4}
+              className={styles.textarea}
+            />
+            <ErrorMessage
+              name="idea"
+              component="div"
+              className={styles.inputError}
+            />
+
+            <label className={styles.upload}>
+              Upload Additional file
+              <input
+                type="file"
+                name="file"
+                onChange={(e) =>
+                  setFieldValue("file", e.currentTarget.files?.[0] || null)
+                }
+                style={{ display: "none" }}
+              />
+            </label>
+            <div className={styles.note}>
+              Attach file. File size of your documents should not exceed 10MB
+            </div>
+
+            <label className={styles.checkboxLabel}>
+              <Field type="checkbox" name="nda" />I want to protect my data by
+              signing an NDA
+            </label>
+            <ErrorMessage
+              name="nda"
+              component="div"
+              className={styles.inputError}
+            />
+
+            <button
+              type="submit"
+              disabled={!isValid}
+              className={styles.submitBtn}
+            >
+              SUBMIT
+            </button>
+          </Form>
         )}
-
-        <input
-          name="contactPhone"
-          placeholder="Contact Phone"
-          value={formik.values.contactPhone}
-          onChange={formik.handleChange}
-          onBlur={formik.handleBlur}
-          className={styles.input}
-        />
-        {formik.touched.contactPhone && formik.errors.contactPhone && (
-          <div className={styles.inputError}>{formik.errors.contactPhone}</div>
-        )}
-
-        <input
-          name="email"
-          type="email"
-          placeholder="Enter your email"
-          value={formik.values.email}
-          onChange={formik.handleChange}
-          onBlur={formik.handleBlur}
-          className={styles.input}
-        />
-        {formik.touched.email && formik.errors.email && (
-          <div className={styles.inputError}>{formik.errors.email}</div>
-        )}
-
-        <input
-          name="linkedin"
-          placeholder="Linkedin"
-          value={formik.values.linkedin}
-          onChange={formik.handleChange}
-          onBlur={formik.handleBlur}
-          className={styles.input}
-        />
-
-        <textarea
-          name="idea"
-          placeholder="Let’s talk about your idea"
-          value={formik.values.idea}
-          onChange={formik.handleChange}
-          onBlur={formik.handleBlur}
-          rows={4}
-          className={styles.textarea}
-        />
-        {formik.touched.idea && formik.errors.idea && (
-          <div className={styles.inputError}>{formik.errors.idea}</div>
-        )}
-
-        <label className={styles.upload}>
-          Upload Additional file
-          <input
-            type="file"
-            name="file"
-            onChange={(e) =>
-              formik.setFieldValue("file", e.currentTarget.files?.[0] || null)
-            }
-            style={{ display: "none" }}
-          />
-        </label>
-        <div className={styles.note}>
-          Attach file. File size of your documents should not exceed 10MB
-        </div>
-
-        <button
-          type="submit"
-          disabled={!formik.isValid}
-          className={styles.submitBtn}
-        >
-          SUBMIT
-        </button>
-
-        <label className={styles.checkboxLabel}>
-          <input
-            type="checkbox"
-            name="nda"
-            checked={formik.values.nda}
-            onChange={formik.handleChange}
-          />
-          I want to protect my data by signing an NDA
-        </label>
-        {formik.touched.nda && formik.errors.nda && (
-          <div className={styles.inputError}>{formik.errors.nda}</div>
-        )}
-      </form>
+      </Formik>
 
       <div className={styles.sidebar}>
         <h4>Offices</h4>
@@ -266,32 +249,36 @@ export const ContactForm = () => {
         <p>🇺🇸 +1 3333333330</p>
 
         <h5>Would you like to join our newsletter?</h5>
-        <form
-          onSubmit={newsletterFormik.handleSubmit}
-          className={styles.newsletterForm}
+        <Formik<NewsletterFormValues>
+          initialValues={{ email: "" }}
+          validationSchema={newsletterSchema}
+          onSubmit={(values) => {
+            alert("Newsletter subscribed: " + values.email);
+          }}
         >
-          <input
-            name="email"
-            type="email"
-            placeholder="Email"
-            value={newsletterFormik.values.email}
-            onChange={newsletterFormik.handleChange}
-            onBlur={newsletterFormik.handleBlur}
-            className={styles.newsletterInput}
-          />
-          <button
-            type="submit"
-            disabled={!newsletterFormik.isValid}
-            className={styles.newsletterBtn}
-          >
-            ✓
-          </button>
-        </form>
-        {newsletterFormik.touched.email && newsletterFormik.errors.email && (
-          <div className={styles.inputError}>
-            {newsletterFormik.errors.email}
-          </div>
-        )}
+          {({ isValid }) => (
+            <Form className={styles.newsletterForm}>
+              <Field
+                name="email"
+                type="email"
+                placeholder="Email"
+                className={styles.newsletterInput}
+              />
+              <button
+                type="submit"
+                disabled={!isValid}
+                className={styles.newsletterBtn}
+              >
+                ✓
+              </button>
+              <ErrorMessage
+                name="email"
+                component="div"
+                className={styles.inputError}
+              />
+            </Form>
+          )}
+        </Formik>
       </div>
     </div>
   );
